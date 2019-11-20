@@ -10,7 +10,19 @@ jobs:
     steps:
       - uses: actions/checkout@v1
         with:
-          fetch-depth: 1
-      # - uses: ./.github/actions/publish-gh-pages
-      #   env:
-      #     PUSH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          submodules: true
+
+    - name: Setup Hugo
+      uses: peaceiris/actions-hugo@v2.2.3
+      with:
+        hugo-version: '0.58.3'
+
+    - name: Build
+      run: hugo --minify
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v2.5.0
+      env:
+        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        PUBLISH_BRANCH: master
+        PUBLISH_DIR: ./public
