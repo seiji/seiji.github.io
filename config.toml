@@ -1,0 +1,9 @@
+baseURL = "http://example.org/"
+languageCode = "en-us"
+title = "posts"
+theme = "onetwothree"
+
+[params]
+  twitter = "seiji"
+  navigation = ["about.md"]
+  style = ""
