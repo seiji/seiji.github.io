@@ -4,7 +4,8 @@ title = "posts"
 theme = "onetwothree"
 
 pygmentsCodeFences = true
-pygmentsStyle = "manni"
+#pygmentsStyle = "manni"
+pygmentsStyle = "pygments"
 
 [params]
   twitter = ""
