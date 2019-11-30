@@ -8,6 +8,7 @@ tags:
 ---
 
 Some of `terraform state` commands can be used in case that modify the terraform state.
+
 We use `terraform state mv` command to move items or rename items in that state, enabling efficient refactoring.
 
 ### terraform versions
