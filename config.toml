@@ -3,7 +3,10 @@ languageCode = "en-us"
 title = "posts"
 theme = "onetwothree"
 
+pygmentsCodeFences = true
+pygmentsStyle = "manni"
+
 [params]
-  twitter = "seiji"
+  twitter = ""
   navigation = ["about.md"]
   style = ""
