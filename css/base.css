@@ -8,7 +8,7 @@ body, li  p {
 h1,h2,h3,h4,h5,h6,header,header.a {
   font-family: 'Roboto', sans-serif;
   line-height: 1.6;
-  margin-bottom: 0.6em;
+  margin-bottom: 0.8em;
 }
 
 header,header.a{
@@ -227,6 +227,7 @@ code {
   font-family: 'Source Code Pro', monospace;
   font-size:0.9em;
   font-weight: bold;
+  line-height: 1.8;
   -moz-hyphens: none;
   -webkit-hyphens: none;
   -o-hyphens: none;
