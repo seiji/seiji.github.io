@@ -41,7 +41,7 @@ export default {
     h3: {
       width: '74vw',
       padding: '0rem',
-      margin: '1rem 0rem 1rem 0rem',
+      margin: '2rem 0rem 1rem 0rem',
       fontWeight: 200,
     },
     h4: {
@@ -60,7 +60,8 @@ export default {
       color: "#999",
       fontSize: '0.8em',
       padding: "0.2em",
-      margin: '0'
+      whiteSpace: "pre-line",
+      margin: '1rem 0'
     },
     p: {
       width: '74vw',
@@ -76,7 +77,8 @@ export default {
     },
     ul: {
       width: '70vw',
-      padding: '0 1rem'
+      padding: '0 1rem',
+      margin: '1rem 0rem 0rem 0rem',
     },
     li: {
       fontSize: '1.2em',
@@ -90,7 +92,8 @@ export default {
     code: {
       bg: 'text',
       color: 'background',
-      padding: '0 0.2em'
+      lineHeight: '1.4em',
+      padding: '0'
     },
   }
 }

@@ -18,10 +18,10 @@ import imgSwithcRole from './img/switch-role.png'
 </Header>
 
 <Head>
-  <title>AWS認証情報, ACCESS_KEY</title>
+  <title>AWS認証情報</title>
 </Head>
 
-# AWS認証情報, ACCESS_KEY
+# AWS認証情報
 
 --------------------------------------------------
 <Headline>AWS認証情報</Headline>
@@ -38,24 +38,16 @@ import imgSwithcRole from './img/switch-role.png'
 --------------------------------------------------
 <Headline sectionTitle='AWS認証情報'>認証</Headline>
 
-<Steps>
-
 - AWS Principalの正当性を確認すること
-
-</Steps>
 
 --------------------------------------------------
 <Headline >AWS Principal</Headline>
 
 ### AWSにサインインし、リクエストを作成できるもの
 
-<Steps>
-
 - rootアカウント
 - IAM User
 - IAM Roleを引き受けるUser/Application
-
-</Steps>
 
 --------------------------------------------------
 <Headline >IAM Roleを引き受けるUser</Headline>
@@ -117,17 +109,52 @@ import imgSwithcRole from './img/switch-role.png'
 ### この文脈では以下の組み合わせをACCESS_KEYと定義
 - (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
 
+
+### ACCESS_KEYを扱うことのリスク
+
+- 漏洩することでそのIAM Userの権限が取得した人が利用可能
+
 --------------------------------------------------
-<Headline sectionTitle='ACCESS_KEY'>流出先</Headline>
+<Headline sectionTitle='ACCESS_KEY'>漏洩の影響</Headline>
 
-### リポジトリからPushするもの
+- Miningなどの計算リソースとして使用
+- 顧客データの販売・流出
+- データを暗号化して、身代金を要求される
+- AWSリソースの削除
 
-- Git Repojitories (github, gitlab...)
+### 企業の損失は計り知れない
+
+--------------------------------------------------
+<Headline sectionTitle='ACCESS_KEY'>侵害を受けたら</Headline>
+
+### 漏洩したIAM Userの権限によるがOps的には
+- 漏洩したIAM Userは停止・削除
+- 該当のIAM Userが作成した全てのAWSリソースの削除
+- 全てのrootアカウント、IAM Userの認証情報をロテーション
+
+### AWSアカウント内の全てのApplication停止も
+
+https://aws.amazon.com/premiumsupport/knowledge-center/potential-account-compromise/
+
+--------------------------------------------------
+<Headline sectionTitle='ACCESS_KEY'>漏洩元</Headline>
+
+### Pushされ、公開されているもの
+
+- Gitリポジトリ (github, gitlab...)
 - Container Registories (AWS, GCP, Azure, DockerHub...)
+
+### 実際Githubの公開リポジトリには多くのsecretが公開されています
 
 https://www.ndss-symposium.org/wp-content/uploads/2019/02/ndss2019_04B-3_Meli_paper.pdf
 
-### コードベースから環境変数参照に切り替える
+--------------------------------------------------
+<Headline sectionTitle='ACCESS_KEY'>漏洩の防止</Headline>
+
+- ACCESS_KEYを生成しない
+- コードベースから環境変数へと変更する
+-> リポジトリに含めない
+- 意図しないcommitから防ぐ
 
 --------------------------------------------------
 <Headline sectionTitle='ACCESS_KEY'>コードベース</Headline>
@@ -135,17 +162,16 @@ https://www.ndss-symposium.org/wp-content/uploads/2019/02/ndss2019_04B-3_Meli_pa
 ### リポジトリ内に<Accent>ACCESS_KEY</Accent>が含められている例
 
 - ソースコード内
-- direnvみたいなもの(ignoreしても)
+- direnvみたいなもの
 - docker-compose.yml
 - ECSタスク定義の定義yamlおよびjson
-- CI/CDの設定ファイル
 - その他設定ファイル
 
 --------------------------------------------------
 <Headline sectionTitle='ACCESS_KEY'>コードベースの悪いところ</Headline>
 
 - gitなどのVCSにpushされる可能性がある
-- production/staging/developmentとstage毎に分けたい時に複雑になる
+- 環境毎に分けたい時に複雑になる
 - 一時的な認証情報(ACCESS_KEY + (<Accent>AWS_SESSION_TOKEN</Accent>))が使いづらい
 
 --------------------------------------------------
@@ -202,11 +228,41 @@ https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/loading-node-c
 https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
 
 --------------------------------------------------
+<Headline sectionTitle='ACCESS_KEY'>保存先</Headline>
+
+### AWS CLI credentials
+```
+# ~/.aws/credentials
+
+[default]
+aws_access_key_id = AKIAXXXXXXX
+aws_secret_access_key = XXXXXXXXXX
+
+[profile1]
+aws_access_key_id = AKIAXXXXXXX
+aws_secret_access_key = XXXXXXXXXX
+```
+
+### OS keystore
+- aws-vault https://github.com/99designs/aws-vault
+
+--------------------------------------------------
+<Headline>aws-vault</Headline>
+
+> AWS Vault <Accent>stores IAM credentials in your operating system's secure keystore</Accent> and then <Accent>generates temporary credentials</Accent> from those to expose to your shell and applications. It's <Accent>designed to be complementary to the AWS CLI tools</Accent>, and is aware of your profiles and configuration in ~/.aws/config.
+https://github.com/99designs/aws-vault
+
+- OS keystoreに保存
+- 一時認証情報を生成して使用
+- AWS CLIの補完として設計
+
+### AWS CLI credentialsが不要になり、暗号化もされる
+
+--------------------------------------------------
 <Headline sectionTitle='ACCESS_KEY'>環境変数設定</Headline>
 
 ### リポジトリ外からSDK・CLIでの対応を考慮し、設定
 
-- shellで環境変数切替
 - AWS CLI
 ```bash
 $ AWS_PROFILE=profile1 aws sts get-caller-identity
@@ -216,15 +272,53 @@ $ AWS_PROFILE=profile1 aws sts get-caller-identity
     "Arn": "arn:aws:iam::1234567890:user/profile1"
 }
 ```
-- aws-vault https://github.com/99designs/aws-vault
+- aws-vault
+```bash
+$ aws-vault exec profile1 -- aws sts-get-caller-identity
+{
+    "UserId": "AIDXXXXXXXXXXXXXXXX",
+    "Account": "1234567890",
+    "Arn": "arn:aws:iam::1234567890:user/profile1"
+}
+```
+--------------------------------------------------
+<Headline sectionTitle='ACCESS_KEY - 環境変数設定'>AWS CLI</Headline>
+
+```bash
+get_session () {
+  unset AWS_ACCESS_KEY_ID
+  unset AWS_SECRET_ACCESS_KEY
+  unset AWS_SESSION_TOKEN
+
+  SESSION=$(aws sts get-session-token)
+  echo AWS_ACCESS_KEY_ID=$(echo $SESSION | jq -r ".Credentials.AccessKeyId")
+  echo AWS_SECRET_ACCESS_KEY=$(echo $SESSION | jq -r ".Credentials.SecretAccessKey")
+  echo AWS_SESSION_TOKEN=$(echo $SESSION | jq -r ".Credentials.SessionToken")
+}
+```
+### export
+```
+$ AWS_PROFILE=profile1 export $(get_session)
+```
+
+### pipe
+
+```bash
+$ AWS_PROFILE=profile1 get_session | env | grep AWS
+AWS_ACCESS_KEY_ID=ASIAXXXXXX
+AWS_SECRET_ACCESS_KEY=XXXXXXXXXX
+AWS_SESSION_TOKEN=XXXXXXXXXX
+```
 
 --------------------------------------------------
 <Headline sectionTitle='ACCESS_KEY - 環境変数設定'>aws-vault</Headline>
 
-> AWS Vault <Accent>stores IAM credentials in your operating system's secure keystore</Accent> and then <Accent>generates temporary credentials</Accent> from those to expose to your shell and applications. It's <Accent>designed to be complementary to the AWS CLI tools</Accent>, and is aware of your profiles and configuration in ~/.aws/config.
-https://github.com/99designs/aws-vault
+### export
+```
+$ export $(aws_vault exec profile1 -- env | grep AWS)
+```
 
-### pipeで実行や、direnvと連携とか
+### pipeで実行
 
 ```bash
 $ aws-vault exec profile1 -- env | grep AWS
@@ -247,7 +341,7 @@ AWS_SESSION_EXPIRATION=2020-03-18T09:32:09Z
 - その他リポジトリから生成されるもの
 
 --------------------------------------------------
-<Headline sectionTitle='ACCESS_KEY'>Prevent from committing</Headline>
+<Headline sectionTitle='ACCESS_KEY'>Commitから漏洩を防ぐ</Headline>
 
 ### git-secretの導入
 https://github.com/awslabs/git-secrets
@@ -255,35 +349,17 @@ https://github.com/awslabs/git-secrets
 - 意図しないcommitを防ぐ
 - gitの履歴に残さない
 
----
+--------------------------------------------------
+<Headline>Conclusions</Headline>
 
-<Headline sectionTitle='SDK'>CodeBaseで認証情報を使う</Headline>
+### ACCESS_KEYはなるべく使わない
+- なるべく生成しない
+- AWSリソース上で動かす際はIAM Roleを使用する
 
-### Hardcode
+### ACCESS_KEYの漏洩を防ぐ
+- リポジトリ外から環境変数に
+- Commitから漏洩を防ぐ
 
-<Highlighter language='javascript'>
-AWS.config.credentials = new AWS.Credentials(accessKeyId, secretAccessKey)
-</Highlighter>
-
----
-<Headline sectionTitle='Bad Practice'>Usage</Headline>
-
-<Invert>
-
-## Invert Layout
-
-</Invert>
-
----
-
-## Conclustion
-
-### 認証情報のリークを防ぐ
-
-- リポジトリ外から認証情報は環境変数に
-- git-secretの導入
-
-### 様々な認証情報で動かす
-
-- SDKの認証情報を設定するのは環境変数に
+### * ACCESS_KEYを共有しない
+### * ACCESS_KEYの権限を意識する
 
