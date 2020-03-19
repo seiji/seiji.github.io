@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "mdx-deck deck.mdx --basepath .",
-    "build": "mdx-deck build --no-html deck.mdx & cpx \"img/*\" ./dist/img",
+    "build": "mdx-deck build deck.mdx & cpx \"img/*\" ./dist/img",
     "pdf": "mdx-deck pdf --width 1377 --height 756 deck.mdx",
     "screenshot": "mdx-deck screenshot --width 1580 --height 830 deck.mdx",
     "deploy": "gh-pages -d dist",
