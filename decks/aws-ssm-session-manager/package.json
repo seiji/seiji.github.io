@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "mdx-deck deck.mdx",
-    "build": "mdx-deck build deck.mdx",
+    "build": "mdx-deck build deck.mdx --basepath=/decks/aws-ssm-session-manager",
     "pdf": "mdx-deck pdf --width 1377 --height 756 deck.mdx",
     "screenshot": "mdx-deck screenshot --width 1580 --height 830 deck.mdx"
   },
