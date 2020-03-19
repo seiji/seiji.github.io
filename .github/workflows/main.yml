@@ -31,11 +31,6 @@ jobs:
           node-version: 12.x
 
       - name: Build mdx-deck
-        strategy:
-          matrix:
-            decks:
-              - aws-security-credential
-              - aws-ssm-session-manager
         run: |
           rm -Rf ./public/decks/${{matrix.decks}} && cd ./decks/${{matrix.decks}} && npm install && npm run build && ls -la && mv -i ./public ../../public/decks/
 
