@@ -5,6 +5,7 @@
   "dependencies": {},
   "devDependencies": {
     "@emotion/core": "^10.0.28",
+    "cpx": "^1.5.0",
     "mdx-deck": "^4.1.1",
     "react-syntax-highlighter": "^12.2.1"
   },

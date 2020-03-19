@@ -31,7 +31,7 @@ jobs:
 
       - name: Build mdx-deck
         run: |
-          pushd ./decks/${{matrix.decks}} && npm install && npm run build && popd && mkdir -p ./public/decks/${{matrix.decks}} && cp -R ./decks/${{matrix.decks}} ./public/decks/${{matrix.decks}}
+          pushd ./decks/${{matrix.decks}} && npm install && npm run build && popd && mkdir -p ./public/decks/${{matrix.decks}} && mv ./decks/${{matrix.decks}}/public ./public/decks/${{matrix.decks}}
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v2.5.0
