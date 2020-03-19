@@ -41,7 +41,7 @@ export default {
     h3: {
       width: '74vw',
       padding: '0rem',
-      margin: '2rem 0rem 1rem 0rem',
+      margin: '1rem 0rem 1rem 0rem',
       fontWeight: 200,
     },
     h4: {
@@ -78,10 +78,10 @@ export default {
     ul: {
       width: '70vw',
       padding: '0 1rem',
-      margin: '1rem 0rem 0rem 0rem',
+      margin: '0.2rem 0rem 0rem 0rem',
     },
     li: {
-      fontSize: '1.2em',
+      fontSize: '1.1em',
       padding: '1rem 0'
     },
     img: {

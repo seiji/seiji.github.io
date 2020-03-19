@@ -124,7 +124,7 @@ https://docs.aws.amazon.com/quickstart/latest/linux-bastion/architecture.html
 --------------------------------------------------
 <Headline sectionTitle='AWS SSM Session Manager'>SSHで接続</Headline>
 
-### AWS CLI, Session Manager(1.1.23.0以降)が必要
+#### AWS CLI, Session Manager(1.1.23.0以降)が必要
 
 - ssh_configに記載
 
@@ -132,11 +132,8 @@ https://docs.aws.amazon.com/quickstart/latest/linux-bastion/architecture.html
 # ~/.ssh/config
 
 # SSH over Session Manager
-host i-* mi-*
-  ProxyCommand sh -c "aws ssm start-session \
-  --target %h \
-  --document-name AWS-StartSSHSession \
-  --parameters 'portNumber=%p'"
+host i-* mi-* ProxyCommand sh -c "aws ssm start-session  --target %h \
+  --document-name AWS-StartSSHSession  --parameters 'portNumber=%p'"
 ```
 https://docs.aws.amazon.com/ja_jp/systems-manager/latest/userguide/session-manager-getting-started-enable-ssh-connections.html
 
