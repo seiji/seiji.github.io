@@ -10,9 +10,8 @@ jobs:
     strategy:
       matrix:
         decks:
-          - aws-security-credential
+          # - aws-security-credential
           - aws-ssm-session-manager
-
     steps:
       - uses: actions/checkout@v1
         with:
