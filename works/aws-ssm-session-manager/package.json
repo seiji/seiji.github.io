@@ -1,21 +1,23 @@
 {
   "name": "aws-ssm-session-manager",
   "version": "1.0.0",
-  "main": "index.js",
+  "engines": {
+    "node": "12.x"
+  },
   "dependencies": {},
   "devDependencies": {
     "@emotion/core": "^10.0.28",
+    "@emotion/styled": "^10.0.27",
     "cpx": "^1.5.0",
+    "gatsby-plugin-emotion": "^4.1.25",
     "mdx-deck": "^4.1.1",
     "react-syntax-highlighter": "^12.2.1"
   },
   "scripts": {
     "start": "mdx-deck deck.mdx",
     "build": "mdx-deck build deck.mdx",
+    "help": "mdx-deck",
     "pdf": "mdx-deck pdf --width 1377 --height 756 deck.mdx",
     "screenshot": "mdx-deck screenshot --width 1580 --height 830 deck.mdx"
-  },
-  "author": "",
-  "license": "MIT",
-  "description": ""
+  }
 }
