@@ -7,8 +7,12 @@ jobs:
   build:
     name: build-and-deploy
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        decks:
+          - aws-ssm-session-manager
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
           submodules: true
 
@@ -18,6 +22,15 @@ jobs:
 
       - name: Build
         run: hugo --minify
+
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Build mdx-deck
+        run: |
+          pushd ./decks/${{matrix.decks}} && npm install && npm run build && popd && mkdir -p ./public/decks/${{matrix.deck}} && cp -R ./decks/${{matrix.decks}} ./public/decks/${{matric.decks}}
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v2.5.0
