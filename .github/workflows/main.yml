@@ -11,6 +11,7 @@ jobs:
     strategy:
       matrix:
         decks:
+          - aws-security-credential
           - aws-ssm-session-manager
     steps:
       - uses: actions/checkout@v1
@@ -31,7 +32,7 @@ jobs:
 
       - name: Build mdx-deck
         run: |
-          mkdir -p ./public/decks/${{matrix.decks}} && cd ./decks/${{matrix.decks}} && npm install && npm run build && mv ./public ../../public/decks/${{matrix.decks}}
+          rm -Rf ./public/decks/${{matrix.decks}} && cd ./decks/${{matrix.decks}} && npm install && npm run build && mv ./public ../../public/decks/${{matrix.decks}}
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v2.5.0
