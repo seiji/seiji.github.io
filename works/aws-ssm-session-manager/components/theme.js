@@ -28,7 +28,7 @@ export default {
       justifyContent: 'flex-start',
       margin: '0 auto',
       overflow: 'visible',
-      padding: '8rem 6rem',
+      padding: '6rem 6rem',
       position: 'inherit',
       width: '80vw',
       '& [name="wrapper"]': {
@@ -37,6 +37,12 @@ export default {
     },
     Header: {
       color: 'sub',
+    },
+    h3: {
+      width: '74vw',
+      padding: '0rem',
+      margin: '1rem 0rem 1rem 0rem',
+      fontWeight: 200,
     },
     h3: {
       width: '74vw',
@@ -58,8 +64,8 @@ export default {
       width: '70vw',
       borderLeft: "10px solid #ddd",
       color: "#999",
-      fontSize: '0.8em',
-      padding: "0.2em",
+      fontSize: '0.7em',
+      padding: "0.4em",
       whiteSpace: "pre-line",
       margin: '1rem 0'
     },

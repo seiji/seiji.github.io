@@ -11,7 +11,7 @@ const Headline = ({ children, sectionTitle }) => {
         width: 74vw;
         font-weight: 300;
         color: ${colors.text};
-        margin-top: 0;
+        margin-top: 1em;
         margin-bottom: 0.66em;
       `}
     >

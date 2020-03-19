@@ -28,7 +28,7 @@ export default {
       justifyContent: 'flex-start',
       margin: '0 auto',
       overflow: 'visible',
-      padding: '8rem 6rem',
+      padding: '6rem 6rem',
       position: 'inherit',
       width: '80vw',
       '& [name="wrapper"]': {
@@ -70,9 +70,9 @@ export default {
     pre: {
       width: '70vw',
       color: 'background',
-      fontSize: '0.8em',
+      fontSize: '0.7em',
       bg: 'text',
-      padding: '0.6em',
+      padding: '0.4em',
       margin: '0em'
     },
     ul: {
