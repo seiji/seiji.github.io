@@ -1,0 +1,87 @@
+digraph G {
+  graph [
+    charset = "UTF-8",
+    compound = true,
+    fontname = "Migu 1M",
+    fontsize = 16,
+    label = "AWS SSO",
+    labeljust = "l",
+    labelloc = "t",
+    rankdir = LR,
+    ranksep = 0.8,
+    splines = false,
+  ];
+  node [
+    fontname = "Migu 1M",
+    fontsize = 12,
+    shape = "box",
+    style = solid,
+    width = 1.4,
+  ];
+  edge [
+    fontsize = 14,
+    style = solid,
+    arrowsize = 0.8,
+  ];
+
+  subgraph cluster_idp {
+    graph [
+      fontsize = 14,
+      label = "Identity Provider",
+      nodesep = 0.2,
+    ];
+
+    subgraph cluster_idp_default {
+      graph [
+        fontsize = 13,
+        label = "AWS"
+      ];
+      idp_aws_sso [label="AWS SSO"]
+      idp_ad [label="Active Directory"]
+      {rank = min; idp_aws_sso; idp_ad;}
+    };
+    subgraph cluster_idp_3rd {
+      graph [
+        fontsize = 13,
+        label = "3rd IdP",
+      ];
+      idp_azure_ad [label="AzureAD"]
+      {rank = min; idp_azure_ad;}
+    };
+  };
+
+  aws_sso_user [label="User", shape="ellipse"]
+  aws_sso [label="AWS SSO"]
+  {rank = same; aws_sso; aws_sso_user;}
+
+  aws_sso_user -> aws_sso;
+
+  subgraph cluster_sp {
+    graph [
+      fontsize = 14,
+      label = "Service Provider",
+    ];
+    subgraph cluster_sp_aws {
+      graph [
+        fontsize = 13,
+        label = "AWS Accounts",
+      ];
+      sp_aws_a [label="AWS Account A"]
+      sp_aws_b [label="AWS Account B"]
+      {rank = same; sp_aws_a; sp_aws_b;}
+    };
+    subgraph cluster_sp_cloud {
+      graph [
+        fontsize = 13,
+        label = "Cloud Applications",
+      ];
+      sp_github [label="Github"]
+      sp_slack [label="Slack"]
+      sp_salesforce [label="Salesforce"]
+      {rank = same; sp_github; sp_slack; sp_salesforce;}
+    };
+  };
+
+  idp_aws_sso -> aws_sso [ltail="cluster_idp"];
+  aws_sso -> sp_aws_a [lhead="cluster_sp"];
+}

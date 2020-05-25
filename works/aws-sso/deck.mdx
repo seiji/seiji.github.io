@@ -1,0 +1,165 @@
+import { Head, Image, Notes } from 'mdx-deck'
+import myTheme from './theme'
+export const theme = myTheme
+
+import Accent from './components/accent'
+import Headline from './components/headline'
+
+import imgAWSSSODiagram from './img/aws_sso.png'
+import imgAWSSSOAWSAccounts from './img/aws_sso_aws_accounts.png'
+import imgAWSSSOUserLogin from './img/aws_sso_user_login.png'
+import imgAWSSSOUserPortal from './img/aws_sso_user_portal.png'
+
+<Header>
+AWS SSO
+</Header>
+<Head>
+  <title>AWS SSO</title>
+</Head>
+
+# AWS SSO
+
+--------------------------------------------------
+<Headline>AWS SSO とは</Headline>
+
+>複数の AWS アカウントおよびビジネスアプリケーションへのシングルサインオン (SSO) アクセスを一元管理
+https://aws.amazon.com/jp/single-sign-on/
+
+<img src={imgAWSSSOUserPortal} />
+
+--------------------------------------------------
+<Headline sectionTitle='AWS SSO'>機能</Headline>
+
+- AWSOrganizationsとの統合
+- AWSアカウントおよびクラウドアプリケーションへのSSOアクセス
+- 認証情報の一元管理
+- CloudTrailでのLogging, Monitoring
+
+--------------------------------------------------
+<Headline sectionTitle='AWS SSO'>Diagram</Headline>
+
+<img src={imgAWSSSODiagram} />
+
+--------------------------------------------------
+<Headline sectionTitle='AWS SSO'>ログイン</Headline>
+
+AWS AccountIDに紐づかない別のログイン画面
+
+https://<Accent>xxx</Accent>.awsapps.com (<Accent>xxx</Accent>はuniqueであれば可変)
+
+<img src={imgAWSSSOUserLogin} />
+
+--------------------------------------------------
+<Headline sectionTitle='AWS SSO'>Diagram</Headline>
+
+<img src={imgAWSSSODiagram} />
+
+--------------------------------------------------
+<Headline sectionTitle='AWS SSO'>Identity Provider</Headline>
+
+以下から1つだけ選択可能
+
+- AWS SSO
+- Active Directory
+- 外部の認証プロバイダ(AzureADとか)
+
+--------------------------------------------------
+<Headline sectionTitle='AWS SSO'>AWS SSO User</Headline>
+
+IAM Userと比べると
+
+- 認証情報の一元管理
+- <Accent>email</Accent>が必須
+- 属性も登録可能 (電話番号とか社内IDとか)
+- MFA deviceが複数登録可能
+
+--------------------------------------------------
+<Headline sectionTitle='AWS SSO'>AWS SSO User - MFA</Headline>
+
+MFAの認証手段には以下の3つがある
+
+- context-aware(接続するBrowser, Location, Deviceが変化した時)
+- always-on(IAM Userはこれ)
+- disable
+
+--------------------------------------------------
+<Headline sectionTitle='AWS SSO'>Diagram</Headline>
+
+<img src={imgAWSSSODiagram} />
+
+--------------------------------------------------
+<Headline sectionTitle='AWS SSO'>Service Provider</Headline>
+
+- AWSアカウント
+- クラウドアプリケーション(Github, Slack, Salesforceとか)
+
+--------------------------------------------------
+<Headline sectionTitle='AWS SSO'>AWSアカウントへのアクセス</Headline>
+
+<img src={imgAWSSSOAWSAccounts} />
+
+--------------------------------------------------
+<Headline sectionTitle='AWS SSO'>クラウドアプリケーションへのアクセス</Headline>
+
+<img src={imgAWSSSOUserPortal} />
+
+--------------------------------------------------
+<Headline sectionTitle='AWS SSO'>AWS CLI</Headline>
+
+cli v2からSSOのcredentialに対応
+
+```
+$ ~/.aws/credentials
+[profile sso-sandbox]
+sso_start_url = https://xxx.awsapps.com/start
+sso_region = us-east-1
+sso_account_id = 1234567890
+sso_role_name = AWSAdministratorAccess
+```
+api実行
+```
+$ aws sso login --profile sso-sandbox
+// ブラウザでcli許可
+$ aws sts get-caller-identity --profile sso-sandbox
+{
+    "UserId": "xxxxxxxx:user",
+    "Account": "1234567880",
+    "Arn": "arn:aws:sts::1234567890:assumed-role/xxxx/user"
+}
+```
+
+--------------------------------------------------
+<Headline sectionTitle='AWS SSO'>aws-vault</Headline>
+
+v6.0.0-betaから対応 - https://github.com/99designs/aws-vault
+
+```
+$ aws-vault list
+Profile           Credentials              Sessions
+=======           ===========              ========
+default           default                  -
+sso-master        -                        -
+sso-audit         -                        -
+sso-log           -                        -
+sso-sandbox       -                        -
+```
+api実行
+```
+$ aws-vault exec sso-toyama-production -- aws sts get-caller-identity
+// ブラウザでcli許可
+$ aws sts get-caller-identity --profile sso-sandbox
+{
+    "UserId": "xxxxxxxx:user",
+    "Account": "1234567880",
+    "Arn": "arn:aws:sts::1234567890:assumed-role/xxxx/user"
+}
+```
+
+--------------------------------------------------
+<Headline sectionTitle='AWS SSO'>まとめ</Headline>
+
+AWS SSOを使うと
+- 複数AWSアカウントにログインするのに便利
+- 認証情報の一元管理(IAM UserをAWSアカウント毎に作らなくてよい)
+- 既存のIdPも使える
+
