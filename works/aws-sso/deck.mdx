@@ -30,7 +30,7 @@ https://aws.amazon.com/jp/single-sign-on/
 --------------------------------------------------
 <Headline sectionTitle='AWS SSO'>機能</Headline>
 
-- AWSOrganizationsとの統合
+- AWS Organizationsとの統合
 - AWSアカウントおよびクラウドアプリケーションへのSSOアクセス
 - 認証情報の一元管理
 - CloudTrailでのLogging, Monitoring
@@ -108,15 +108,19 @@ MFAの認証手段には以下の3つがある
 
 cli v2からSSOのcredentialに対応
 
+
+#### ~/.aws/config
+
 ```
-$ ~/.aws/credentials
 [profile sso-sandbox]
 sso_start_url = https://xxx.awsapps.com/start
 sso_region = us-east-1
 sso_account_id = 1234567890
 sso_role_name = AWSAdministratorAccess
 ```
-api実行
+
+#### login
+
 ```
 $ aws sso login --profile sso-sandbox
 // ブラウザでcli許可
@@ -143,9 +147,11 @@ sso-audit         -                        -
 sso-log           -                        -
 sso-sandbox       -                        -
 ```
-api実行
+
+#### login
+
 ```
-$ aws-vault exec sso-toyama-production -- aws sts get-caller-identity
+$ aws-vault exec sso-sandbox -- aws sts get-caller-identity
 // ブラウザでcli許可
 $ aws sts get-caller-identity --profile sso-sandbox
 {
@@ -156,10 +162,29 @@ $ aws sts get-caller-identity --profile sso-sandbox
 ```
 
 --------------------------------------------------
+<Headline sectionTitle='AWS SSO'>aws-vault, direnv</Headline>
+
+#### ~/.config/direnv/direnvrc
+
+```
+use_aws_profile(){
+  profile=$1
+  export $(aws-vault exec $profile -- env | grep AWS_ | grep -v AWS_VAULT)
+}
+```
+
+#### .envrc
+
+```
+use aws_profile sso-sandbox
+```
+
+--------------------------------------------------
 <Headline sectionTitle='AWS SSO'>まとめ</Headline>
 
 AWS SSOを使うと
 - 複数AWSアカウントにログインするのに便利
 - 認証情報の一元管理(IAM UserをAWSアカウント毎に作らなくてよい)
+- IAM Userとは管理が別
 - 既存のIdPも使える
 
